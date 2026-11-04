@@ -1,0 +1,702 @@
+[
+  {
+    "id": 1,
+    "category": "Introductions",
+    "en": "Hello, I'm Jacob.",
+    "han": "你好，我叫 Jacob。",
+    "jyutping": "nei5 hou2 ngo5 giu3 Jacob"
+  },
+  {
+    "id": 2,
+    "category": "Introductions",
+    "en": "I live in the Netherlands.",
+    "han": "我住喺荷蘭。",
+    "jyutping": "ngo5 zyu6 hai2 ho4 laan4"
+  },
+  {
+    "id": 3,
+    "category": "Introductions",
+    "en": "I'm 52 years old.",
+    "han": "我今年五十二歲。",
+    "jyutping": "ngo5 gam1 nin4 ng5 sap6 ji6 seoi3"
+  },
+  {
+    "id": 4,
+    "category": "Introductions",
+    "en": "What's your name?",
+    "han": "你叫咩名？",
+    "jyutping": "nei5 giu3 me1 meng2"
+  },
+  {
+    "id": 5,
+    "category": "Introductions",
+    "en": "I'm from the Netherlands.",
+    "han": "我嚟自荷蘭。",
+    "jyutping": "ngo5 lai4 zi6 ho4 laan4"
+  },
+  {
+    "id": 6,
+    "category": "Introductions",
+    "en": "Nice to meet you.",
+    "han": "好高興識到你。",
+    "jyutping": "hou2 gou1 hing3 sik1 dou3 nei5"
+  },
+  {
+    "id": 7,
+    "category": "Introductions",
+    "en": "I speak a little Cantonese.",
+    "han": "我識講少少廣東話。",
+    "jyutping": "ngo5 sik1 gong2 siu2 siu2 gwong2 dung1 waa2"
+  },
+  {
+    "id": 8,
+    "category": "Introductions",
+    "en": "I don't understand Cantonese well.",
+    "han": "我唔係好明廣東話。",
+    "jyutping": "ngo5 m4 hai6 hou2 ming4 gwong2 dung1 waa2"
+  },
+  {
+    "id": 9,
+    "category": "Introductions",
+    "en": "Where are you from?",
+    "han": "你嚟自邊度？",
+    "jyutping": "nei5 lai4 zi6 bin1 dou6"
+  },
+  {
+    "id": 10,
+    "category": "Introductions",
+    "en": "See you later.",
+    "han": "遲啲見。",
+    "jyutping": "ci4 di1 gin3"
+  },
+  {
+    "id": 11,
+    "category": "Essentials",
+    "en": "Please.",
+    "han": "唔該。",
+    "jyutping": "m4 goi1"
+  },
+  {
+    "id": 12,
+    "category": "Essentials",
+    "en": "Thank you for the gift.",
+    "han": "多謝你。",
+    "jyutping": "do1 ze6 nei5"
+  },
+  {
+    "id": 13,
+    "category": "Essentials",
+    "en": "Excuse me.",
+    "han": "唔該借借。",
+    "jyutping": "m4 goi1 ze3 ze3"
+  },
+  {
+    "id": 14,
+    "category": "Essentials",
+    "en": "Sorry.",
+    "han": "對唔住。",
+    "jyutping": "deoi3 m4 zyu6"
+  },
+  {
+    "id": 15,
+    "category": "Essentials",
+    "en": "It's okay.",
+    "han": "唔緊要。",
+    "jyutping": "m4 gan2 jiu3"
+  },
+  {
+    "id": 16,
+    "category": "Essentials",
+    "en": "Yes.",
+    "han": "係。",
+    "jyutping": "hai6"
+  },
+  {
+    "id": 17,
+    "category": "Essentials",
+    "en": "No.",
+    "han": "唔係。",
+    "jyutping": "m4 hai6"
+  },
+  {
+    "id": 18,
+    "category": "Essentials",
+    "en": "I don't know.",
+    "han": "我唔知。",
+    "jyutping": "ngo5 m4 zi1"
+  },
+  {
+    "id": 19,
+    "category": "Essentials",
+    "en": "No problem.",
+    "han": "冇問題。",
+    "jyutping": "mou5 man6 tai4"
+  },
+  {
+    "id": 20,
+    "category": "Essentials",
+    "en": "Can you help me?",
+    "han": "你可唔可以幫我？",
+    "jyutping": "nei5 ho2 m4 ho2 ji5 bong1 ngo5"
+  },
+  {
+    "id": 21,
+    "category": "Conversation",
+    "en": "How are you?",
+    "han": "你好嗎？",
+    "jyutping": "nei5 hou2 maa3"
+  },
+  {
+    "id": 22,
+    "category": "Conversation",
+    "en": "I'm fine, thanks.",
+    "han": "我幾好，唔該。",
+    "jyutping": "ngo5 gei2 hou2 m4 goi1"
+  },
+  {
+    "id": 23,
+    "category": "Conversation",
+    "en": "What is this?",
+    "han": "呢個係咩？",
+    "jyutping": "ni1 go3 hai6 me1"
+  },
+  {
+    "id": 24,
+    "category": "Conversation",
+    "en": "What does that mean?",
+    "han": "嗰個係咩意思？",
+    "jyutping": "go2 go3 hai6 me1 ji3 si1"
+  },
+  {
+    "id": 25,
+    "category": "Conversation",
+    "en": "Could you say that again?",
+    "han": "可唔可以再講一次？",
+    "jyutping": "ho2 m4 ho2 ji5 zoi3 gong2 jat1 ci3"
+  },
+  {
+    "id": 26,
+    "category": "Conversation",
+    "en": "Please speak slowly.",
+    "han": "唔該講慢啲。",
+    "jyutping": "m4 goi1 gong2 maan6 di1"
+  },
+  {
+    "id": 27,
+    "category": "Conversation",
+    "en": "I understand.",
+    "han": "我明白。",
+    "jyutping": "ngo5 ming4 baak6"
+  },
+  {
+    "id": 28,
+    "category": "Conversation",
+    "en": "I don't understand.",
+    "han": "我唔明。",
+    "jyutping": "ngo5 m4 ming4"
+  },
+  {
+    "id": 29,
+    "category": "Conversation",
+    "en": "Do you speak English?",
+    "han": "你識唔識講英文？",
+    "jyutping": "nei5 sik1 m4 sik1 gong2 jing1 man2"
+  },
+  {
+    "id": 30,
+    "category": "Conversation",
+    "en": "How do you say this in Cantonese?",
+    "han": "呢個用廣東話點講？",
+    "jyutping": "ni1 go3 jung6 gwong2 dung1 waa2 dim2 gong2"
+  },
+  {
+    "id": 31,
+    "category": "Food & drink",
+    "en": "I'd like water, please.",
+    "han": "唔該，我要水。",
+    "jyutping": "m4 goi1 ngo5 jiu3 seoi2"
+  },
+  {
+    "id": 32,
+    "category": "Food & drink",
+    "en": "I'd like a coffee.",
+    "han": "我要杯咖啡。",
+    "jyutping": "ngo5 jiu3 bui1 gaa3 fe1"
+  },
+  {
+    "id": 33,
+    "category": "Food & drink",
+    "en": "I'd like tea, please.",
+    "han": "唔該，我要茶。",
+    "jyutping": "m4 goi1 ngo5 jiu3 caa4"
+  },
+  {
+    "id": 34,
+    "category": "Food & drink",
+    "en": "Is this spicy?",
+    "han": "呢個辣唔辣？",
+    "jyutping": "ni1 go3 laat6 m4 laat6"
+  },
+  {
+    "id": 35,
+    "category": "Food & drink",
+    "en": "Not spicy, please.",
+    "han": "唔該，唔好辣。",
+    "jyutping": "m4 goi1 m4 hou2 laat6"
+  },
+  {
+    "id": 36,
+    "category": "Food & drink",
+    "en": "I'm thirsty.",
+    "han": "我口渴。",
+    "jyutping": "ngo5 hau2 hot3"
+  },
+  {
+    "id": 37,
+    "category": "Food & drink",
+    "en": "I'm hungry.",
+    "han": "我肚餓。",
+    "jyutping": "ngo5 tou5 ngo6"
+  },
+  {
+    "id": 38,
+    "category": "Food & drink",
+    "en": "Less ice, please.",
+    "han": "唔該，少冰。",
+    "jyutping": "m4 goi1 siu2 bing1"
+  },
+  {
+    "id": 39,
+    "category": "Food & drink",
+    "en": "No sugar, please.",
+    "han": "唔該，走糖。",
+    "jyutping": "m4 goi1 zau2 tong4"
+  },
+  {
+    "id": 40,
+    "category": "Food & drink",
+    "en": "Can I have a cup of hot water?",
+    "han": "可唔可以俾杯熱水我？",
+    "jyutping": "ho2 m4 ho2 ji5 bei2 bui1 jit6 seoi2 ngo5"
+  },
+  {
+    "id": 41,
+    "category": "Eating out",
+    "en": "A table for two, please.",
+    "han": "唔該，兩位。",
+    "jyutping": "m4 goi1 loeng5 wai2"
+  },
+  {
+    "id": 42,
+    "category": "Eating out",
+    "en": "Could I see the menu?",
+    "han": "唔該，可唔可以睇餐牌？",
+    "jyutping": "m4 goi1 ho2 m4 ho2 ji5 tai2 caan1 paai4"
+  },
+  {
+    "id": 43,
+    "category": "Eating out",
+    "en": "I'd like this one.",
+    "han": "我要呢個。",
+    "jyutping": "ngo5 jiu3 ni1 go3"
+  },
+  {
+    "id": 44,
+    "category": "Eating out",
+    "en": "What do you recommend?",
+    "han": "你有咩推介？",
+    "jyutping": "nei5 jau5 me1 teoi1 gaai3"
+  },
+  {
+    "id": 45,
+    "category": "Eating out",
+    "en": "Is this vegetarian?",
+    "han": "呢個係咪素嘅？",
+    "jyutping": "ni1 go3 hai6 mai6 sou3 ge3"
+  },
+  {
+    "id": 46,
+    "category": "Eating out",
+    "en": "I don't eat meat.",
+    "han": "我唔食肉。",
+    "jyutping": "ngo5 m4 sik6 juk6"
+  },
+  {
+    "id": 47,
+    "category": "Eating out",
+    "en": "This is delicious.",
+    "han": "呢個好好食。",
+    "jyutping": "ni1 go3 hou2 hou2 sik6"
+  },
+  {
+    "id": 48,
+    "category": "Eating out",
+    "en": "Could we have the bill, please?",
+    "han": "唔該，埋單。",
+    "jyutping": "m4 goi1 maai4 daan1"
+  },
+  {
+    "id": 49,
+    "category": "Eating out",
+    "en": "Can I have this to go?",
+    "han": "呢個可唔可以外賣？",
+    "jyutping": "ni1 go3 ho2 m4 ho2 ji5 ngoi6 maai6"
+  },
+  {
+    "id": 50,
+    "category": "Eating out",
+    "en": "No bag, thank you.",
+    "han": "唔使袋，唔該。",
+    "jyutping": "m4 sai2 doi2 m4 goi1"
+  },
+  {
+    "id": 51,
+    "category": "Getting around",
+    "en": "Where is the MTR station?",
+    "han": "港鐵站喺邊度？",
+    "jyutping": "gong2 tit3 zaam6 hai2 bin1 dou6"
+  },
+  {
+    "id": 52,
+    "category": "Getting around",
+    "en": "Where is the bus stop?",
+    "han": "巴士站喺邊度？",
+    "jyutping": "baa1 si2 zaam6 hai2 bin1 dou6"
+  },
+  {
+    "id": 53,
+    "category": "Getting around",
+    "en": "How do I get to Central?",
+    "han": "去中環點行？",
+    "jyutping": "heoi3 zung1 waan4 dim2 haang4"
+  },
+  {
+    "id": 54,
+    "category": "Getting around",
+    "en": "Is it far?",
+    "han": "遠唔遠？",
+    "jyutping": "jyun5 m4 jyun5"
+  },
+  {
+    "id": 55,
+    "category": "Getting around",
+    "en": "Please stop here.",
+    "han": "唔該，喺呢度停。",
+    "jyutping": "m4 goi1 hai2 ni1 dou6 ting4"
+  },
+  {
+    "id": 56,
+    "category": "Getting around",
+    "en": "I'd like a taxi, please.",
+    "han": "唔該，我要搭的士。",
+    "jyutping": "m4 goi1 ngo5 jiu3 daap3 dik1 si2"
+  },
+  {
+    "id": 57,
+    "category": "Getting around",
+    "en": "Where is the exit?",
+    "han": "出口喺邊度？",
+    "jyutping": "ceot1 hau2 hai2 bin1 dou6"
+  },
+  {
+    "id": 58,
+    "category": "Getting around",
+    "en": "Does this bus go to Central?",
+    "han": "呢班車去唔去中環？",
+    "jyutping": "ni1 baan1 ce1 heoi3 m4 heoi3 zung1 waan4"
+  },
+  {
+    "id": 59,
+    "category": "Getting around",
+    "en": "One ticket to Central, please.",
+    "han": "唔該，一張去中環嘅飛。",
+    "jyutping": "m4 goi1 jat1 zoeng1 heoi3 zung1 waan4 ge3 fei1"
+  },
+  {
+    "id": 60,
+    "category": "Getting around",
+    "en": "Please show me on the map.",
+    "han": "唔該，喺地圖度指俾我睇。",
+    "jyutping": "m4 goi1 hai2 dei6 tou4 dou6 zi2 bei2 ngo5 tai2"
+  },
+  {
+    "id": 61,
+    "category": "Shopping",
+    "en": "How much is this?",
+    "han": "呢個幾多錢？",
+    "jyutping": "ni1 go3 gei2 do1 cin2"
+  },
+  {
+    "id": 62,
+    "category": "Shopping",
+    "en": "That's too expensive.",
+    "han": "太貴喇。",
+    "jyutping": "taai3 gwai3 laa3"
+  },
+  {
+    "id": 63,
+    "category": "Shopping",
+    "en": "Do you have a smaller one?",
+    "han": "有冇細啲嘅？",
+    "jyutping": "jau5 mou5 sai3 di1 ge3"
+  },
+  {
+    "id": 64,
+    "category": "Shopping",
+    "en": "Can I try this on?",
+    "han": "我可唔可以試呢件？",
+    "jyutping": "ngo5 ho2 m4 ho2 ji5 si3 ni1 gin6"
+  },
+  {
+    "id": 65,
+    "category": "Shopping",
+    "en": "Do you have this in another colour?",
+    "han": "呢個有冇第二隻色？",
+    "jyutping": "ni1 go3 jau5 mou5 dai6 ji6 zek3 sik1"
+  },
+  {
+    "id": 66,
+    "category": "Shopping",
+    "en": "I'm just looking, thanks.",
+    "han": "我睇下啫，唔該。",
+    "jyutping": "ngo5 tai2 haa5 ze1 m4 goi1"
+  },
+  {
+    "id": 67,
+    "category": "Shopping",
+    "en": "Can I pay by card?",
+    "han": "可唔可以用卡俾錢？",
+    "jyutping": "ho2 m4 ho2 ji5 jung6 kaat1 bei2 cin2"
+  },
+  {
+    "id": 68,
+    "category": "Shopping",
+    "en": "I only have cash.",
+    "han": "我得現金。",
+    "jyutping": "ngo5 dak1 jin6 gam1"
+  },
+  {
+    "id": 69,
+    "category": "Shopping",
+    "en": "Do you have a bag?",
+    "han": "有冇袋？",
+    "jyutping": "jau5 mou5 doi2"
+  },
+  {
+    "id": 70,
+    "category": "Shopping",
+    "en": "I don't need a receipt.",
+    "han": "我唔使收據。",
+    "jyutping": "ngo5 m4 sai2 sau1 geoi3"
+  },
+  {
+    "id": 71,
+    "category": "Everyday life",
+    "en": "What time is it?",
+    "han": "而家幾點？",
+    "jyutping": "ji4 gaa1 gei2 dim2"
+  },
+  {
+    "id": 72,
+    "category": "Everyday life",
+    "en": "What time does the shop open?",
+    "han": "間舖幾點開？",
+    "jyutping": "gaan1 pou3 gei2 dim2 hoi1"
+  },
+  {
+    "id": 73,
+    "category": "Everyday life",
+    "en": "Where is the toilet?",
+    "han": "洗手間喺邊度？",
+    "jyutping": "sai2 sau2 gaan1 hai2 bin1 dou6"
+  },
+  {
+    "id": 74,
+    "category": "Everyday life",
+    "en": "What's the password?",
+    "han": "密碼係咩？",
+    "jyutping": "mat6 maa5 hai6 me1"
+  },
+  {
+    "id": 75,
+    "category": "Everyday life",
+    "en": "It's very hot today.",
+    "han": "今日好熱。",
+    "jyutping": "gam1 jat6 hou2 jit6"
+  },
+  {
+    "id": 76,
+    "category": "Everyday life",
+    "en": "It's raining.",
+    "han": "落緊雨。",
+    "jyutping": "lok6 gan2 jyu5"
+  },
+  {
+    "id": 77,
+    "category": "Everyday life",
+    "en": "I need a phone charger.",
+    "han": "我需要電話充電器。",
+    "jyutping": "ngo5 seoi1 jiu3 din6 waa2 cung1 din6 hei3"
+  },
+  {
+    "id": 78,
+    "category": "Everyday life",
+    "en": "Can I use the bathroom?",
+    "han": "我可唔可以用洗手間？",
+    "jyutping": "ngo5 ho2 m4 ho2 ji5 jung6 sai2 sau2 gaan1"
+  },
+  {
+    "id": 79,
+    "category": "Everyday life",
+    "en": "The lift is over there.",
+    "han": "電梯喺嗰邊。",
+    "jyutping": "din6 tai1 hai2 go2 bin1"
+  },
+  {
+    "id": 80,
+    "category": "Everyday life",
+    "en": "I'm going back to the hotel.",
+    "han": "我返酒店。",
+    "jyutping": "ngo5 faan1 zau2 dim3"
+  },
+  {
+    "id": 81,
+    "category": "People & plans",
+    "en": "Are you free today?",
+    "han": "你今日得唔得閒？",
+    "jyutping": "nei5 gam1 jat6 dak1 m4 dak1 haan4"
+  },
+  {
+    "id": 82,
+    "category": "People & plans",
+    "en": "What are you doing tomorrow?",
+    "han": "你聽日做咩？",
+    "jyutping": "nei5 ting1 jat6 zou6 me1"
+  },
+  {
+    "id": 83,
+    "category": "People & plans",
+    "en": "Let's go together.",
+    "han": "我哋一齊去啦。",
+    "jyutping": "ngo5 dei6 jat1 cai4 heoi3 laa1"
+  },
+  {
+    "id": 84,
+    "category": "People & plans",
+    "en": "What time shall we meet?",
+    "han": "我哋幾點見？",
+    "jyutping": "ngo5 dei6 gei2 dim2 gin3"
+  },
+  {
+    "id": 85,
+    "category": "People & plans",
+    "en": "Let's meet here.",
+    "han": "我哋喺呢度見。",
+    "jyutping": "ngo5 dei6 hai2 ni1 dou6 gin3"
+  },
+  {
+    "id": 86,
+    "category": "People & plans",
+    "en": "I'm almost there.",
+    "han": "我就嚟到。",
+    "jyutping": "ngo5 zau6 lai4 dou3"
+  },
+  {
+    "id": 87,
+    "category": "People & plans",
+    "en": "I'll be a little late.",
+    "han": "我會遲少少到。",
+    "jyutping": "ngo5 wui5 ci4 siu2 siu2 dou3"
+  },
+  {
+    "id": 88,
+    "category": "People & plans",
+    "en": "Would you like to have dinner together?",
+    "han": "你想唔想一齊食晚飯？",
+    "jyutping": "nei5 soeng2 m4 soeng2 jat1 cai4 sik6 maan5 faan6"
+  },
+  {
+    "id": 89,
+    "category": "People & plans",
+    "en": "I have plans today.",
+    "han": "我今日有約。",
+    "jyutping": "ngo5 gam1 jat6 jau5 joek3"
+  },
+  {
+    "id": 90,
+    "category": "People & plans",
+    "en": "See you tomorrow.",
+    "han": "聽日見。",
+    "jyutping": "ting1 jat6 gin3"
+  },
+  {
+    "id": 91,
+    "category": "Help & health",
+    "en": "I need help.",
+    "han": "我需要幫手。",
+    "jyutping": "ngo5 seoi1 jiu3 bong1 sau2"
+  },
+  {
+    "id": 92,
+    "category": "Help & health",
+    "en": "Please call the police.",
+    "han": "唔該幫我報警。",
+    "jyutping": "m4 goi1 bong1 ngo5 bou3 ging2"
+  },
+  {
+    "id": 93,
+    "category": "Help & health",
+    "en": "Please call an ambulance.",
+    "han": "唔該幫我叫救護車。",
+    "jyutping": "m4 goi1 bong1 ngo5 giu3 gau3 wu6 ce1"
+  },
+  {
+    "id": 94,
+    "category": "Help & health",
+    "en": "I don't feel well.",
+    "han": "我唔舒服。",
+    "jyutping": "ngo5 m4 syu1 fuk6"
+  },
+  {
+    "id": 95,
+    "category": "Help & health",
+    "en": "I have a headache.",
+    "han": "我頭痛。",
+    "jyutping": "ngo5 tau4 tung3"
+  },
+  {
+    "id": 96,
+    "category": "Help & health",
+    "en": "Where is the nearest hospital?",
+    "han": "最近嘅醫院喺邊度？",
+    "jyutping": "zeoi3 gan6 ge3 ji1 jyun2 hai2 bin1 dou6"
+  },
+  {
+    "id": 97,
+    "category": "Help & health",
+    "en": "I need a doctor.",
+    "han": "我需要睇醫生。",
+    "jyutping": "ngo5 seoi1 jiu3 tai2 ji1 sang1"
+  },
+  {
+    "id": 98,
+    "category": "Help & health",
+    "en": "I'm allergic to peanuts.",
+    "han": "我對花生敏感。",
+    "jyutping": "ngo5 deoi3 faa1 sang1 man5 gam2"
+  },
+  {
+    "id": 99,
+    "category": "Help & health",
+    "en": "I need to rest.",
+    "han": "我要休息。",
+    "jyutping": "ngo5 jiu3 jau1 sik1"
+  },
+  {
+    "id": 100,
+    "category": "Help & health",
+    "en": "Can you write it down?",
+    "han": "可唔可以寫低？",
+    "jyutping": "ho2 m4 ho2 ji5 se2 dai1"
+  }
+]

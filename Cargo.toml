@@ -1,0 +1,87 @@
+[package]
+name = "singsin"
+version = "0.1.0"
+edition = "2021"
+description = "SingSin 聲線 — a Cantonese voice-line practice studio built in Rust + WebAssembly"
+license = "MIT"
+repository = "https://github.com/jacob/singsin"
+
+[lib]
+name = "singsin"
+path = "src/lib.rs"
+
+[dependencies]
+yew = { version = "0.21", features = ["csr"] }
+wasm-bindgen = "=0.2.129"
+wasm-bindgen-futures = "=0.4.79"
+js-sys = "=0.3.106"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+console_error_panic_hook = "0.1"
+
+[dependencies.web-sys]
+version = "=0.3.106"
+features = [
+    "AudioBuffer",
+    "AudioBufferSourceNode",
+    "AudioContext",
+    "AudioDestinationNode",
+    "AudioNode",
+    "AudioParam",
+    "AudioScheduledSourceNode",
+    "AnalyserNode",
+    "AbortController",
+    "AbortSignal",
+    "BaseAudioContext",
+    "BinaryType",
+    "Blob",
+    "CanvasRenderingContext2d",
+    "CloseEvent",
+    "Document",
+    "DomRect",
+    "Element",
+    "Event",
+    "EventTarget",
+    "File",
+    "FileList",
+    "FileReader",
+    "GainNode",
+    "Headers",
+    "HtmlCanvasElement",
+    "HtmlElement",
+    "HtmlInputElement",
+    "HtmlSelectElement",
+    "HtmlTextAreaElement",
+    "KeyboardEvent",
+    "MediaDevices",
+    "MediaStream",
+    "MediaStreamTrack",
+    "MediaStreamAudioSourceNode",
+    "MediaStreamConstraints",
+    "Navigator",
+    "Node",
+    "Performance",
+    "Request",
+    "RequestInit",
+    "RequestMode",
+    "Response",
+    "AudioProcessingEvent",
+    "ScriptProcessorNode",
+    "SpeechSynthesis",
+    "SpeechSynthesisUtterance",
+    "SpeechSynthesisVoice",
+    "StereoPannerNode",
+    "Storage",
+    "TextDecoder",
+    "TextEncoder",
+    "Url",
+    "UrlSearchParams",
+    "Window",
+    "console",
+]
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+panic = "abort"

@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test — engine, DSP and chart logic
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Run the test suite
+        run: cargo test --all-targets
+
+  build:
+    name: Build — WebAssembly bundle
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - name: Install trunk
+        run: |
+          curl -fsSL \
+            https://github.com/trunk-rs/trunk/releases/download/v0.22.1/trunk-x86_64-unknown-linux-gnu.tar.gz \
+            -o trunk.tar.gz
+          tar -xzf trunk.tar.gz
+          sudo mv trunk /usr/local/bin/trunk
+
+      - name: Build the release bundle
+        run: trunk build --release
+
+      - name: Upload the bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: singsin-dist
+          path: dist/
+          if-no-files-found: error

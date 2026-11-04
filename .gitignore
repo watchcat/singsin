@@ -1,0 +1,15 @@
+# Rust build artefacts
+/target/
+
+# Trunk build output
+/dist/
+
+# Release bundles
+*.zip
+
+# Local deploy staging directories
+/.deploy-src/
+/.pub/
+
+# macOS
+.DS_Store
