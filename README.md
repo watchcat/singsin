@@ -1,5 +1,7 @@
 # SingSin 聲線
 
+[![CI](https://github.com/watchcat/singsin/actions/workflows/ci.yml/badge.svg)](https://github.com/watchcat/singsin/actions/workflows/ci.yml)
+
 **Find your Cantonese voice.** A single-page Rust + WebAssembly application for
 learning and practising everyday Hong Kong Cantonese: a live pitch-tracking
 practice studio fused with a deep pedagogical pronunciation guide, on top of an
@@ -10,6 +12,7 @@ editable phrasebook.
 > the air, and you learn to draw the same line yourself.
 
 **Try it live:** https://singsin-app.watchcat.workers.dev/
+**Source:** https://github.com/watchcat/singsin
 
 ---
 
@@ -286,6 +289,9 @@ its reference audio without asking the visitor to run anything locally.
 The app is deployed and publicly reachable at:
 
 > **https://singsin-app.watchcat.workers.dev/**
+
+The source lives at **https://github.com/watchcat/singsin**, and CI runs the
+test suite plus a full WebAssembly release build on every push.
 
 It is served by a Cloudflare Worker (`singsin-app`) backed by an **R2 bucket**
 (`singsin-site`), with the four built assets — `index.html`, the hashed `.js`,
