@@ -14,7 +14,7 @@ jobs:
     name: Test — engine, DSP and chart logic
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: dtolnay/rust-toolchain@stable
 
@@ -25,7 +25,7 @@ jobs:
     name: Build — WebAssembly bundle
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: dtolnay/rust-toolchain@stable
         with:
@@ -36,6 +36,10 @@ jobs:
           curl -fsSL \
             https://github.com/trunk-rs/trunk/releases/download/v0.22.1/trunk-x86_64-unknown-linux-gnu.tar.gz \
             -o trunk.tar.gz
+          curl -fsSL \
+            https://github.com/trunk-rs/trunk/releases/download/v0.22.1/trunk-x86_64-unknown-linux-gnu.tar.gz.sha256 \
+            -o trunk.tar.gz.sha256
+          echo "$(cat trunk.tar.gz.sha256)  trunk.tar.gz" | sha256sum --check
           tar -xzf trunk.tar.gz
           sudo mv trunk /usr/local/bin/trunk
 
@@ -43,7 +47,7 @@ jobs:
         run: trunk build --release
 
       - name: Upload the bundle
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: singsin-dist
           path: dist/
