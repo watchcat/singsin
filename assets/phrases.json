@@ -23,9 +23,10 @@
   {
     "id": 4,
     "category": "Introductions",
-    "en": "What's your name?",
-    "han": "你叫咩名？",
-    "jyutping": "nei5 giu3 me1 meng2"
+    "en": "How shall I address you?",
+    "han": "你點稱呼呢？",
+    "jyutping": "nei5 dim2 cing1 fu1 ne1",
+    "notes": "The **polite** way to ask someone's name — use it with a stranger, an older person or a client. The casual version is **你叫咩名？** (*nei5 giu3 me1 meng2*), which is what you say to a friend or a child. A common extension is **請問點稱呼？** (*cing2 man6 dim2 cing1 fu1*) — *May I ask what to call you?*"
   },
   {
     "id": 5,

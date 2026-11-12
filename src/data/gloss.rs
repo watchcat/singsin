@@ -206,8 +206,20 @@ const GLOSSES: &[(&str, &str)] = &[
     ("餐", "meal"),
     ("餓", "hungry"),
     ("高", "tall / high"),
-    ("點", "point / a bit"),
+    ("點", "how / what time"),
     ("齊", "together / neat"),
+    ("稱", "call / address"),
+    ("呼", "call out / address"),
+];
+
+/// Glosses for a character that changes meaning with its reading.
+///
+/// 呢 is the case in the bundled library: *ni1* is the demonstrative "this"
+/// (呢個, 呢度), but *ne1* is the question particle that closes a question.
+/// The character table cannot tell the two apart, so the readings that mean
+/// something different are listed here and matched on the Jyutping.
+const BY_READING: &[(&str, &str, &str)] = &[
+    ("呢", "ne1", "question particle"),
 ];
 
 /// The English gloss for one Chinese character, if it is known.
@@ -221,10 +233,24 @@ pub fn gloss(han: &str) -> Option<&'static str> {
         .map(|(_, g)| *g)
 }
 
+/// The gloss for one character *as it is read here*.
+///
+/// The reading-specific table wins where it applies — 呢 is "question
+/// particle" as *ne1* and "this" as *ni1* — and everything else falls back
+/// to the character table.
+pub fn gloss_for(han: &str, jyutping: &str) -> Option<&'static str> {
+    if let Some((_, _, g)) = BY_READING.iter().find(|(c, j, _)| *c == han && *j == jyutping) {
+        return Some(*g);
+    }
+    gloss(han)
+}
+
 /// The gloss for every character of `han`, in order.
 ///
 /// Characters that are not in the table produce an empty string, so the
-/// result always lines up with the characters.
+/// result always lines up with the characters. The readings are not
+/// consulted: this walks the characters alone, so a character whose meaning
+/// depends on its reading gets the commonest one.
 pub fn gloss_all(han: &str) -> Vec<String> {
     han.chars()
         .map(|c| gloss(&c.to_string()).unwrap_or("").to_string())

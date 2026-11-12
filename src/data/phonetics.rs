@@ -845,6 +845,50 @@ pub struct PhraseOverride {
 
 const CURATED: &[(i64, PhraseOverride)] = &[
     (
+        4,
+        PhraseOverride {
+            spoken_jyutping: None,
+            strip_note: None,
+            mistakes: Some(&[
+                (
+                    "*nei5 dim2 cing1 fu1 ne1* read as one flat run",
+                    "*nei5 dim2 cing1 fu1 ne1* — four distinct tones",
+                    "Each syllable carries its own tone: 你 low-rising, 點 mid-rising, 稱 high and flat, 呼 high and flat, 呢 high and flat.",
+                ),
+                (
+                    "*dim2* said with a falling tail",
+                    "*dim2* — rising from mid to the top",
+                    "點 is the *how* of *點樣* and *點講*. It starts at mid height and rises; it never falls.",
+                ),
+                (
+                    "*cing1* as in *sing*",
+                    "*cing1* — *ts* as in *cats*, then *ing*",
+                    "The initial written *c* is an affricate — a *ts* — not an *s*. Mandarin speakers relax it into *s*, and 稱呼 comes out as *sing fu*.",
+                ),
+                (
+                    "*fu1* said as *foo* with a glide",
+                    "*fu1* — a tight, rounded *u*",
+                    "呼 is a pure rounded back vowel with no English diphthong. Keep it short and stop there.",
+                ),
+                (
+                    "*ne1* said as *ni1*",
+                    "*ne1* — the *e* of *bed*, not the *ee* of *bead*",
+                    "呢 here is the question particle, not the demonstrative *ni1* used in 呢個. The vowel drops from *i* to *e*.",
+                ),
+            ]),
+            takeaway: Some(
+                "**The shape is: low → mid → high → high → high.** 你 rises from the bottom, 點 carries it from mid to the top, and then 稱呼呢 sits flat on the top of the range. The phrase climbs and then stays high — which is exactly why it sounds courteous. The casual 你叫咩名 (*nei5 giu3 me1 meng2*) sits lower and flatter, and the difference in pitch is part of the difference in register.",
+            ),
+            drill_bodies: Some(&[
+                "Say **nei — dim — cing — fu — ne** with no tones. *nei* = n + ay, *dim* = d + im, *cing* = ts + ing, *fu* = f + oo, *ne* = n + eh.",
+                "Add the tone shapes: **nei5** (low rising) **dim2** (mid rising) **cing1** (high flat) **fu1** (high flat) **ne1** (high flat).",
+                "Put the consonants back, starting with the hardest: **ts** + *ing* for 稱. Relax the *ts* into *s* and the word stops being 稱呼.",
+                "Say the whole phrase slowly — *nei5 dim2 cing1 fu1 ne1* — then at natural speed. Keep the last three syllables flat and high; do not let them sag.",
+                "Make it real: **請問點稱呼？** (*cing2 man6 dim2 cing1 fu1*) — *May I ask what to call you?* — is the full polite form a native actually uses.",
+            ]),
+        },
+    ),
+    (
         2,
         PhraseOverride {
             spoken_jyutping: Some("ngo5 zyu6 hai2 ho4 laan1"),
@@ -1044,7 +1088,9 @@ pub fn analyze(phrase: &Phrase) -> Analysis {
             en: if p.foreign {
                 String::new()
             } else {
-                crate::data::gloss::gloss(&han).unwrap_or("").to_string()
+                // The reading matters: 呢 is "this" as *ni1* but a question
+                // particle as *ne1*, and the phrase decides which.
+                crate::data::gloss::gloss_for(&han, &jp).unwrap_or("").to_string()
             },
         });
     }
