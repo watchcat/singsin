@@ -168,9 +168,17 @@ Four playback modes:
 The running mode is highlighted in the bar, so you always know which voice
 you are hearing.
 
-Plus a **Time-Sync** toggle that rescales your take's `playbackRate` so both
-voices have identical duration, and an axis that can switch between
-**normalised %** and **real seconds**, or zoom into a single syllable.
+Plus a **Time-Sync** toggle that stretches your take so both voices have
+identical duration, and an axis that can switch between **normalised %**
+and **real seconds**, or zoom into a single syllable.
+
+The stretch is done in the signal itself (WSOLA, `src/dsp/stretch.rs`), not
+through the audio source's `playbackRate`. `playbackRate` is a resampling
+control: it changes speed *and* pitch together, so a learner who spoke a
+little fast would hear themselves an octave below — and the chart, which
+analyses the untouched take, would be showing the pitch they actually sang.
+Stretching the samples keeps every frequency where it was, so what you hear
+and what you see are the same thing.
 
 #### Syllable zoom follows the playhead
 

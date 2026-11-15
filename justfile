@@ -25,7 +25,7 @@ deploy:
 
 # Run the phonetic engine, Jyutping parser and DSP tests
 test:
-    cargo test --test phonetics
+    cargo test
 
 # Type-check for the wasm target
 check:

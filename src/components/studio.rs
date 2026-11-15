@@ -148,6 +148,42 @@ fn mix_gains(balance: f32) -> (f32, f32) {
     (1.0 - 0.7 * b, 0.3 + 0.7 * b)
 }
 
+/// The learner's take, matched to the reference's length when time-sync
+/// is on.
+///
+/// The match is made by stretching the signal itself (WSOLA, see
+/// `dsp::stretch`), never by changing `playbackRate`. Resampling the
+/// playback changes the pitch along with the speed, so a learner who
+/// spoke a little fast would hear themselves an octave below and be
+/// taught the wrong contour — while the chart, which analyses the
+/// untouched take, showed the pitch they actually sang. What you hear
+/// and what you see have to be the same thing.
+///
+/// The stretch is bounded: past a factor of two the overlap-add leaves
+/// more artefacts than a take that is simply longer than the reference,
+/// so beyond that the take is played as it was recorded.
+fn synced_take(
+    ctx: &web_sys::AudioContext,
+    take: &AudioBuffer,
+    reference_seconds: f64,
+    time_sync: bool,
+) -> AudioBuffer {
+    if !time_sync || reference_seconds <= 0.0 {
+        return take.clone();
+    }
+    let mine = engine::buffer_duration(take);
+    if mine <= 0.0 {
+        return take.clone();
+    }
+    // Already within two per cent: the two voices line up on their own.
+    if ((mine - reference_seconds) / reference_seconds).abs() < 0.02 {
+        return take.clone();
+    }
+    let factor = (reference_seconds / mine).clamp(0.5, 2.0);
+    let target = mine * factor;
+    engine::stretched_buffer(ctx, take, target).unwrap_or_else(|_| take.clone())
+}
+
 /// The class for one playback-mode button, so the running mode is visible.
 fn mode_class(mode: u8, active: u8) -> &'static str {
     if mode == active {
@@ -377,7 +413,7 @@ pub fn studio(props: &Props) -> Html {
 
             let dur = engine::buffer_duration(&buffer);
             let when = ctx.current_time() + 0.06;
-            match engine::play(&ctx, &buffer, when, 1.0, 1.0, 0.0) {
+            match engine::play(&ctx, &buffer, when, 1.0, 0.0) {
                 Ok(v) => {
                     {
                         let mut a = audio.borrow_mut();
@@ -432,16 +468,13 @@ pub fn studio(props: &Props) -> Html {
                     return;
                 }
             };
-            let mine_dur = engine::buffer_duration(&buffer);
-            let rate = if settings.time_sync && ref_dur > 0.0 {
-                (mine_dur / ref_dur).clamp(0.5, 2.0)
-            } else {
-                1.0
-            };
-            let effective = mine_dur / rate;
+            // Time-sync makes the take last as long as the reference, by
+            // stretching time and not pitch.
+            let take = synced_take(&ctx, &buffer, ref_dur, settings.time_sync);
+            let effective = engine::buffer_duration(&take);
             let when = ctx.current_time() + 0.06;
 
-            match engine::play(&ctx, &buffer, when, rate as f32, 1.0, 0.0) {
+            match engine::play(&ctx, &take, when, 1.0, 0.0) {
                 Ok(v) => {
                     {
                         let mut a = audio.borrow_mut();
@@ -499,13 +532,10 @@ pub fn studio(props: &Props) -> Html {
             };
 
             let ref_dur = engine::buffer_duration(&reference);
-            let mine_dur = engine::buffer_duration(&take);
-            let rate = if settings.time_sync && ref_dur > 0.0 {
-                (mine_dur / ref_dur).clamp(0.5, 2.0)
-            } else {
-                1.0
-            };
-            let effective = mine_dur / rate;
+            // Time-sync makes the take last as long as the reference, by
+            // stretching time and not pitch.
+            let take = synced_take(&ctx, &take, ref_dur, settings.time_sync);
+            let effective = engine::buffer_duration(&take);
             let (go, gm) = mix_gains(settings.balance);
             let (po, pm) = if settings.stereo_split {
                 (-0.35, 0.35)
@@ -514,8 +544,8 @@ pub fn studio(props: &Props) -> Html {
             };
             let when = ctx.current_time() + 0.06;
 
-            let a_voice = engine::play(&ctx, &reference, when, 1.0, go, po);
-            let b_voice = engine::play(&ctx, &take, when, rate as f32, gm, pm);
+            let a_voice = engine::play(&ctx, &reference, when, go, po);
+            let b_voice = engine::play(&ctx, &take, when, gm, pm);
             match (a_voice, b_voice) {
                 (Ok(a), Ok(b)) => {
                     {
@@ -575,19 +605,16 @@ pub fn studio(props: &Props) -> Html {
             };
 
             let ref_dur = engine::buffer_duration(&reference);
-            let mine_dur = engine::buffer_duration(&take);
-            let rate = if settings.time_sync && ref_dur > 0.0 {
-                (mine_dur / ref_dur).clamp(0.5, 2.0)
-            } else {
-                1.0
-            };
-            let effective = mine_dur / rate;
+            // Time-sync makes the take last as long as the reference, by
+            // stretching time and not pitch.
+            let take = synced_take(&ctx, &take, ref_dur, settings.time_sync);
+            let effective = engine::buffer_duration(&take);
             let (go, gm) = mix_gains(settings.balance);
             let when = ctx.current_time() + 0.06;
             let gap = 0.3;
 
-            let a_voice = engine::play(&ctx, &reference, when, 1.0, go, 0.0);
-            let b_voice = engine::play(&ctx, &take, when + ref_dur + gap, rate as f32, gm, 0.0);
+            let a_voice = engine::play(&ctx, &reference, when, go, 0.0);
+            let b_voice = engine::play(&ctx, &take, when + ref_dur + gap, gm, 0.0);
             match (a_voice, b_voice) {
                 (Ok(a), Ok(b)) => {
                     {

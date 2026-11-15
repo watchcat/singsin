@@ -420,11 +420,17 @@ impl Voice {
 }
 
 /// Schedule a buffer to play at a given time.
+///
+/// There is deliberately no playback-rate parameter. `playbackRate` changes
+/// speed *and* pitch together, and the only place that wanted a duration
+/// to change — the studio matching the learner's take to the reference —
+/// wanted the pitch left alone. That work is done in the signal itself
+/// (`dsp::stretch`), where the pitch can be kept exactly where the learner
+/// put it.
 pub fn play(
     context: &AudioContext,
     buffer: &AudioBuffer,
     when: f64,
-    rate: f32,
     level: f32,
     pan: f32,
 ) -> Result<Voice, String> {
@@ -432,7 +438,6 @@ pub fn play(
         .create_buffer_source()
         .map_err(|e| format!("buffer source: {e:?}"))?;
     source.set_buffer(Some(buffer));
-    source.playback_rate().set_value(rate);
 
     let gain = context.create_gain().map_err(|e| format!("gain: {e:?}"))?;
     gain.gain().set_value(level);
@@ -469,7 +474,7 @@ thread_local! {
 /// Play a buffer once and forget about it.
 pub fn play_oneshot(context: &AudioContext, buffer: &AudioBuffer) -> Result<(), String> {
     let when = context.current_time() + 0.02;
-    let voice = play(context, buffer, when, 1.0, 1.0, 0.0)?;
+    let voice = play(context, buffer, when, 1.0, 0.0)?;
     ACTIVE.with(|active| {
         let mut active = active.borrow_mut();
         if active.len() > 12 {
@@ -500,6 +505,24 @@ pub fn samples_to_buffer(
         .copy_to_channel(samples, 0)
         .map_err(|e| format!("copy_to_channel: {e:?}"))?;
     Ok(buffer)
+}
+
+/// A copy of `buffer` that lasts `seconds`, stretched in time rather than
+/// resampled.
+///
+/// The distinction matters: `playbackRate` would change the pitch along
+/// with the speed, so the learner would hear themselves at the wrong
+/// pitch — the one thing a pitch app must not do. Stretching the samples
+/// themselves (see `dsp::stretch`) keeps every frequency where it was.
+pub fn stretched_buffer(
+    context: &AudioContext,
+    buffer: &AudioBuffer,
+    seconds: f64,
+) -> Result<AudioBuffer, String> {
+    let samples = buffer_samples(buffer);
+    let rate = buffer.sample_rate();
+    let stretched = crate::dsp::stretch::stretch_to_duration(&samples, rate, seconds);
+    samples_to_buffer(context, &stretched, rate)
 }
 
 /// Wrap a future into a JavaScript promise.
