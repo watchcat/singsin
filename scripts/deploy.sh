@@ -224,10 +224,22 @@ PY
   if [ "$stale_count" -eq 0 ]; then
     good "no stale objects"
   else
+    # Delete them all in one bulk request. A per-key DELETE cannot express
+    # every possible key: the API reads a '?' in the path as the start of the
+    # query string, so a key like "index.html?httpMetadata=..." is reported as
+    # "key does not exist" and the deploy would stop half-way with a stale
+    # object still in the bucket. The bulk endpoint takes the keys in a JSON
+    # body, where nothing gets re-parsed.
+    python3 - "$WORK/stale.txt" > "$WORK/stale.json" <<'PY'
+import json, sys
+keys = [line.rstrip("\n") for line in open(sys.argv[1]) if line.strip()]
+json.dump(keys, sys.stdout)
+PY
+    api DELETE "/accounts/$CF_ACCOUNT/r2/buckets/$BUCKET/objects" \
+      --data-binary "@$WORK/stale.json"
+    ok_or_die "delete stale objects"
     while IFS= read -r k; do
       [ -n "$k" ] || continue
-      api DELETE "/accounts/$CF_ACCOUNT/r2/buckets/$BUCKET/objects/$(urlenc "$k")" -X DELETE
-      ok_or_die "delete $k"
       printf '    deleted %s\n' "$k"
     done < "$WORK/stale.txt"
     good "pruned $stale_count object(s)"
