@@ -101,3 +101,48 @@ pub fn for_storage(own: &Option<Vec<Phrase>>) -> Option<Vec<Phrase>> {
     let list = own.as_ref()?;
     Some(list.iter().filter(|p| !is_generated(p.id)).cloned().collect())
 }
+
+/// The list that goes into the file the learner takes away.
+///
+/// It is their own phrasebook, and — deliberately — not the list on screen.
+/// The personalised sentences belong to the profile, which lives in this
+/// browser, so a file that carries one learner's name into another
+/// learner's greeting is worse than useless: it also freezes that greeting,
+/// because an imported phrase looks exactly like one the learner wrote by
+/// hand.
+pub fn for_export(own: &Option<Vec<Phrase>>) -> Vec<Phrase> {
+    for_storage(own).unwrap_or_else(crate::data::phrases::seed_phrases)
+}
+
+/// The phrases an import is allowed to bring in.
+///
+/// Two kinds of phrase are left out on the way in:
+///
+/// * the generated ones, which are rebuilt from the profile on every load —
+///   an imported one would only freeze a set of details that are not the
+///   importer's;
+/// * the four introductions the profile personalises, which go back to the
+///   bundled wording. They are the profile's to write: an imported greeting
+///   carrying somebody else's name would sit in the library as if the
+///   learner had written it, and their own details could never change it
+///   again.
+pub fn for_import(list: Vec<Phrase>) -> Vec<Phrase> {
+    let seed = crate::data::phrases::seed_phrases();
+    let personal_ids: Vec<i64> = templates::SEED.iter().map(|t| t.id).collect();
+
+    list.into_iter()
+        .filter(|p| !is_generated(p.id))
+        .map(|mut p| {
+            if personal_ids.contains(&p.id) {
+                if let Some(original) = seed.iter().find(|s| s.id == p.id) {
+                    p.en = original.en.clone();
+                    p.han = original.han.clone();
+                    p.jyutping = original.jyutping.clone();
+                    p.spoken_jyutping = None;
+                    p.notes = None;
+                }
+            }
+            p
+        })
+        .collect()
+}

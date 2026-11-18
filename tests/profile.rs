@@ -3,7 +3,7 @@
 
 use singsin::data::gloss;
 use singsin::data::numbers::{han_number, han_number_spoken};
-use singsin::data::personal::{for_storage, personalise};
+use singsin::data::personal::{for_export, for_import, for_storage, personalise};
 use singsin::data::phonetics;
 use singsin::data::phrases::{seed_phrases, Phrase};
 use singsin::data::profile::{Profile, Slot};
@@ -353,6 +353,57 @@ fn a_detail_that_is_not_in_the_tables_has_no_value() {
         ..Default::default()
     };
     assert!(profile.value(Slot::City).is_none());
+}
+
+// ── taking the phrasebook away, and bringing one back ───────────────────────
+
+#[test]
+fn the_export_carries_the_learners_own_phrasebook_and_not_the_personalisation() {
+    // A file the learner takes away must not carry their details. The
+    // personalised sentences belong to the profile, which lives in this
+    // browser, and a file with somebody else's name in it would freeze
+    // that greeting in the next learner's library.
+    let seed = seed_phrases();
+
+    // With no phrasebook of their own, the export is the bundled library.
+    assert_eq!(for_export(&None).len(), seed.len());
+
+    // With one, it is their own — and the sentences the profile fills in
+    // are in the bundled wording, because that is how they are stored.
+    let exported = for_export(&Some(seed.clone()));
+    let greeting = exported.iter().find(|p| p.id == 1).expect("no greeting");
+    assert_eq!(greeting.han, "你好，我叫 Jacob。");
+}
+
+#[test]
+fn an_imported_phrasebook_does_not_freeze_somebody_elses_details() {
+    // A phrasebook exported from a browser where the learner had filled the
+    // form in carries that learner's name, and the generated sentences too.
+    // Importing it must not put that name in the importer's greeting, and
+    // must not freeze it there as if the importer had written it by hand.
+    let seed = seed_phrases();
+
+    let mut theirs = seed[0].clone();
+    theirs.han = "你好，我叫 Marta。".into();
+    theirs.en = "Hello, I'm Marta.".into();
+    theirs.jyutping = "nei5 hou2 ngo5 giu3 Marta".into();
+
+    let mut generated = seed[0].clone();
+    generated.id = 10_001;
+    generated.han = "我返工做工程師。".into();
+
+    let imported = for_import(vec![theirs, generated]);
+    assert_eq!(imported.len(), 1, "the generated phrase should not be imported");
+    assert_eq!(imported[0].han, "你好，我叫 Jacob。");
+
+    // And the importer's own details still fill the sentence in.
+    let profile = Profile {
+        name_latin: "Sofia".into(),
+        ..Default::default()
+    };
+    let library = personalise(&seed, Some(&imported), &profile);
+    let hello = phrase_with_id(&library.display, 1);
+    assert_eq!(hello.han, "你好，我叫 Sofia。");
 }
 
 // ── the sentences as they are spoken ────────────────────────────────────────

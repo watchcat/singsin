@@ -201,6 +201,10 @@ pub fn app() -> Html {
         let own = own.clone();
         let modal = modal.clone();
         Callback::from(move |list: Vec<Phrase>| {
+            // The imported list is a phrasebook, not a set of details: the
+            // personalised sentences are the profile's to write, and the
+            // generated ones are rebuilt from the profile anyway.
+            let list = personal::for_import(list);
             storage::save_phrases(&list);
             own.set(Some(list));
             modal.set(None);
@@ -353,7 +357,7 @@ pub fn app() -> Html {
         Some(ModalKind::ImportExport) => Some(html! {
             <modals::ModalShell title="Import & export" subtitle="Your phrasebook as JSON"
                 on_close={close_modal.clone()}>
-                <modals::ImportExport phrases={phrases.clone()}
+                <modals::ImportExport phrases={personal::for_export(&own)}
                     on_import={on_import.clone()} on_reset={on_reset.clone()}
                     on_close={close_modal.clone()} />
             </modals::ModalShell>

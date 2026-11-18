@@ -228,6 +228,12 @@ The design rules:
 * **Your own words win.** A bundled phrase you have edited keeps your text; a
   bundled phrase you have deleted stays deleted; the generated sentences are
   rebuilt from your profile every time rather than frozen in storage.
+* **The file you take away carries no details.** The export is your own
+  phrasebook, not the list on screen, so a phrasebook you share cannot put
+  your name in somebody else's greeting. On the way back in, the four
+  introductions the profile personalises go back to the bundled wording —
+  they are the profile's to write — and the generated sentences are left out
+  entirely.
 * **The twenties are written the way they are said.** A page writes 二十一,
   but a Hong Kong speaker says 廿一 — so the sentence uses 廿一, the note on
   the phrase explains the difference, and the engine's sandhi still fires
