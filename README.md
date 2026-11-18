@@ -236,6 +236,12 @@ The design rules:
 Your details live in `localStorage` under `singsin_profile`; **Forget them**
 removes the key and puts the library back exactly as it was.
 
+The app is a static bundle — the server holds the four asset files and
+nothing else, so a profile never leaves the browser and one learner's details
+can never reach another's. `localStorage` is per *browser*, though, not per
+person: on a shared computer the next person to open the app finds your name
+in the greeting, so **Forget them** is there for the classroom case.
+
 ### 6. Optional MiniMax enrichment (`src/minimax.rs`)
 
 When you add or edit a phrase you can ask the MiniMax chat API for bespoke

@@ -328,6 +328,13 @@ pub fn my_details(props: &DetailsProps) -> Html {
                        the reference recordings come from — so the Jyutping is never a guess. A \
                        detail that is not in the list is simply not offered." }
                 </p>
+                <p class="hint">
+                    { "Your details are kept in this browser and nowhere else: the app is a static \
+                       bundle, so the server never sees them and nobody else's can reach them. But \
+                       a browser is per computer, not per person — on a shared machine the next \
+                       person to open the app finds your name in the greeting. Press \
+                       **Forget them** when you are done." }
+                </p>
                 <div class="editor-grid">
                     { number_field("Age", "35", (*profile).age, set_age) }
                     { number_field("Years learning Cantonese", "2", (*profile).years_learning, set_years) }
