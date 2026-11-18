@@ -1259,6 +1259,7 @@ button:disabled { cursor: not-allowed; opacity: .45; }
 .field > span { font-size: 12px; color: var(--muted); }
 .field input[type="text"],
 .field input[type="password"],
+.field input[type="number"],
 .field select,
 .field textarea {
   width: 100%;
@@ -1285,6 +1286,43 @@ button:disabled { cursor: not-allowed; opacity: .45; }
   gap: 0 14px;
 }
 .editor-grid .wide { grid-column: 1 / -1; }
+
+/* ── my details ────────────────────────────────────────────────────────── */
+
+/* The preview of what the learner will say: the Chinese first, because
+   that is what they are about to practise, with the romanisation and the
+   English underneath. */
+.detail-preview {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.detail-preview li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr) minmax(0, 1.2fr);
+  gap: 4px 12px;
+  align-items: baseline;
+  padding: 9px 12px;
+  background: var(--cream);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--green);
+}
+.dp-han { font-size: 16px; color: var(--ink); }
+.dp-jp { font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+.dp-en { font-size: 13px; color: var(--muted); font-style: italic; }
+
+@media (max-width: 640px) {
+  .detail-preview li { grid-template-columns: 1fr; }
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
 
 .editor-llm {
   display: flex;

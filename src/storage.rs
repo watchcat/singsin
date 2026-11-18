@@ -7,10 +7,12 @@
 use serde::{Deserialize, Serialize};
 
 use crate::data::phrases::Phrase;
+use crate::data::profile::Profile;
 
 pub const PHRASES_KEY: &str = "singsin_phrases";
 pub const PRACTICED_KEY: &str = "singsin_practiced";
 pub const SETTINGS_KEY: &str = "singsin_settings";
+pub const PROFILE_KEY: &str = "singsin_profile";
 
 /// User preferences.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -131,5 +133,26 @@ pub fn load_settings() -> Settings {
 pub fn save_settings(settings: &Settings) {
     if let Ok(json) = serde_json::to_string(settings) {
         write_raw(SETTINGS_KEY, &json);
+    }
+}
+
+/// Load the learner's own details.
+pub fn load_profile() -> Profile {
+    read_raw(PROFILE_KEY)
+        .and_then(|raw| serde_json::from_str(&raw).ok())
+        .unwrap_or_default()
+}
+
+/// Persist the learner's own details.
+pub fn save_profile(profile: &Profile) {
+    if let Ok(json) = serde_json::to_string(profile) {
+        write_raw(PROFILE_KEY, &json);
+    }
+}
+
+/// Forget the learner's own details.
+pub fn clear_profile() {
+    if let Some(s) = storage() {
+        let _ = s.remove_item(PROFILE_KEY);
     }
 }

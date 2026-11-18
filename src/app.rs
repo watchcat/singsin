@@ -10,9 +10,11 @@ use yew::prelude::*;
 use crate::audio::engine;
 use crate::audio::SyllableCache;
 use crate::components::chart::{ChartData, ChartModel};
-use crate::components::{banner, cards, chart, drill, header, hero, mistakes, modals, sidebar, studio, tonelist, takeaway};
+use crate::components::{banner, cards, chart, details, drill, header, hero, mistakes, modals, sidebar, studio, tonelist, takeaway};
+use crate::data::personal;
 use crate::data::phonetics;
 use crate::data::phrases::{self, Phrase};
+use crate::data::profile::Profile;
 use crate::storage::{self, Settings};
 
 /// Which modal is open.
@@ -20,6 +22,8 @@ use crate::storage::{self, Settings};
 pub enum ModalKind {
     ToneGuide,
     AudioSettings,
+    /// The learner's own details, and the phrases built from them.
+    MyDetails,
     /// `None` inside means "add a new phrase".
     Editor(Option<i64>),
     ImportExport,
@@ -41,13 +45,26 @@ pub fn run() {
 #[function_component(App)]
 pub fn app() -> Html {
     // ── state ────────────────────────────────────────────────────────────
-    let phrases = use_state(|| storage::load_phrases().unwrap_or_else(phrases::seed_phrases));
+    // The learner's own phrasebook — their edits, additions and deletions —
+    // and the details their sentences are built from. Neither ever holds
+    // the personalised text: that is applied on the way to the screen, so
+    // that changing a detail changes the sentences.
+    let own = use_state(storage::load_phrases);
+    let profile = use_state(storage::load_profile);
     let selected_id = use_state(|| 1i64);
     let practiced = use_state(storage::load_practiced);
     let settings = use_state(storage::load_settings);
     let modal = use_state(|| Option::<ModalKind>::None);
     let menu_open = use_state(|| false);
     let cache = use_state(SyllableCache::default);
+
+    // The bundled library, parsed once.
+    let seed = use_state(phrases::seed_phrases);
+
+    // The library the learner sees: the bundled phrases with their details
+    // filled in, the personal section, and the learner's own edits.
+    let phrases: Vec<Phrase> =
+        personal::personalise(&(*seed).clone(), own.as_deref(), &(*profile).clone()).display;
 
     let model_state = use_state(|| {
         Rc::new(RefCell::new(ChartData {
@@ -138,34 +155,41 @@ pub fn app() -> Html {
     };
 
     let on_save = {
-        let phrases = phrases.clone();
+        let own = own.clone();
         let selected_id = selected_id.clone();
         let modal = modal.clone();
         Callback::from(move |p: Phrase| {
-            let mut list = (*phrases).clone();
+            let mut list = (*own).clone().unwrap_or_else(phrases::seed_phrases);
             match list.iter_mut().find(|x| x.id == p.id) {
                 Some(slot) => *slot = p.clone(),
                 None => list.push(p.clone()),
             }
+            let list = personal::for_storage(&Some(list)).unwrap_or_default();
             storage::save_phrases(&list);
-            phrases.set(list);
+            own.set(Some(list));
             selected_id.set(p.id);
             modal.set(None);
         })
     };
 
     let on_delete = {
-        let phrases = phrases.clone();
+        let own = own.clone();
         let selected_id = selected_id.clone();
         let modal = modal.clone();
         Callback::from(move |id: i64| {
-            let mut list: Vec<Phrase> = (*phrases).clone().into_iter().filter(|p| p.id != id).collect();
+            let mut list: Vec<Phrase> = (*own)
+                .clone()
+                .unwrap_or_else(phrases::seed_phrases)
+                .into_iter()
+                .filter(|p| p.id != id)
+                .collect();
             if list.is_empty() {
                 list = phrases::seed_phrases();
             }
+            let list = personal::for_storage(&Some(list)).unwrap_or_default();
             storage::save_phrases(&list);
             let fallback = list[0].id;
-            phrases.set(list);
+            own.set(Some(list));
             if *selected_id == id {
                 selected_id.set(fallback);
             }
@@ -174,21 +198,21 @@ pub fn app() -> Html {
     };
 
     let on_import = {
-        let phrases = phrases.clone();
+        let own = own.clone();
         let modal = modal.clone();
         Callback::from(move |list: Vec<Phrase>| {
             storage::save_phrases(&list);
-            phrases.set(list);
+            own.set(Some(list));
             modal.set(None);
         })
     };
 
     let on_reset = {
-        let phrases = phrases.clone();
+        let own = own.clone();
         let modal = modal.clone();
         Callback::from(move |_| {
             storage::clear_phrases();
-            phrases.set(phrases::seed_phrases());
+            own.set(None);
             modal.set(None);
         })
     };
@@ -204,6 +228,22 @@ pub fn app() -> Html {
         Callback::from(move |s: Settings| {
             storage::save_settings(&s);
             settings.set(s);
+        })
+    };
+
+    // ── the learner's own details ────────────────────────────────────────
+    let on_profile = {
+        let profile = profile.clone();
+        Callback::from(move |p: Profile| {
+            // An empty profile is not saved: the key is removed instead, so
+            // the app comes back exactly as it was before the learner ever
+            // opened the form.
+            if p.is_empty() {
+                storage::clear_profile();
+            } else {
+                storage::save_profile(&p);
+            }
+            profile.set(p);
         })
     };
 
@@ -241,6 +281,11 @@ pub fn app() -> Html {
     let open_settings = {
         let modal = modal.clone();
         Callback::from(move |_| modal.set(Some(ModalKind::AudioSettings)))
+    };
+
+    let open_details = {
+        let modal = modal.clone();
+        Callback::from(move |_| modal.set(Some(ModalKind::MyDetails)))
     };
 
     let toggle_menu = {
@@ -281,6 +326,14 @@ pub fn app() -> Html {
                     on_settings={on_settings.clone()} on_close={close_modal.clone()} />
             </modals::ModalShell>
         }),
+        Some(ModalKind::MyDetails) => Some(html! {
+            <modals::ModalShell title="My details"
+                subtitle="The library, in your own words"
+                on_close={close_modal.clone()}>
+                <details::MyDetails profile={(*profile).clone()} settings={(*settings).clone()}
+                    on_save={on_profile.clone()} on_close={close_modal.clone()} />
+            </modals::ModalShell>
+        }),
         Some(ModalKind::Editor(id)) => {
             let editing = id.and_then(|i| phrases.iter().find(|p| p.id == i).cloned());
             let editor_key = editing.as_ref().map(|p| p.id).unwrap_or(0);
@@ -300,7 +353,7 @@ pub fn app() -> Html {
         Some(ModalKind::ImportExport) => Some(html! {
             <modals::ModalShell title="Import & export" subtitle="Your phrasebook as JSON"
                 on_close={close_modal.clone()}>
-                <modals::ImportExport phrases={(*phrases).clone()}
+                <modals::ImportExport phrases={phrases.clone()}
                     on_import={on_import.clone()} on_reset={on_reset.clone()}
                     on_close={close_modal.clone()} />
             </modals::ModalShell>
@@ -313,6 +366,7 @@ pub fn app() -> Html {
             <header::Header
                 on_open_tone_guide={open_tone_guide}
                 on_open_settings={open_settings}
+                on_open_details={open_details}
                 on_toggle_menu={toggle_menu}
                 menu_open={*menu_open} />
 
@@ -324,7 +378,7 @@ pub fn app() -> Html {
                         <div class="drawer-backdrop" onclick={backdrop_click.clone()} />
                     }
                     <sidebar::Sidebar
-                        phrases={(*phrases).clone()}
+                        phrases={phrases.clone()}
                         selected_id={*selected_id}
                         practiced={(*practiced).clone()}
                         on_select={on_select.clone()}

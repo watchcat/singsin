@@ -200,7 +200,43 @@ Add, edit, delete, import and export phrases in the UI. Everything persists in
 `singsin_settings`. The seed library (`assets/phrases.json`, 100 phrases) is
 embedded at compile time so the app works offline out of the box.
 
-### 5. Optional MiniMax enrichment (`src/minimax.rs`)
+### 5. A library that talks about *you*
+
+The **My details** form takes a name, an age, a home city and country, a job,
+a hobby, the people you live with and how long you have been learning
+Cantonese — and the library is rebuilt around them. Four of the bundled
+sentences become yours (`你好，我叫 Marta。`, `我今年三十五歲。`, …) and a new
+**About me** section appears: where you live, where you are from, what you do,
+what you do for fun, who you are with, how long you have been learning.
+
+Every one of those sentences is an ordinary phrase, so it goes through the
+whole phonetic engine — tones, traps, the mistakes table, the five drill
+passes, the pitch chart.
+
+The design rules:
+
+* **Nothing is guessed.** The places and the jobs come from curated tables
+  (`src/data/tables.rs`) whose Jyutping was checked against
+  [words.hk](https://words.hk), the same source the reference recordings come
+  from. A detail the app does not know is simply not offered. The one place
+  a model is allowed near the app is the reading of a *Chinese name*, and even
+  that is shown to you to correct before it is saved.
+* **The profile is the source of truth.** The app stores your details and
+  your own phrasebook — never the personalised text. The personalisation is
+  applied on the way to the screen, so changing a detail changes the
+  sentences, and changing an unrelated phrase does not.
+* **Your own words win.** A bundled phrase you have edited keeps your text; a
+  bundled phrase you have deleted stays deleted; the generated sentences are
+  rebuilt from your profile every time rather than frozen in storage.
+* **The twenties are written the way they are said.** A page writes 二十一,
+  but a Hong Kong speaker says 廿一 — so the sentence uses 廿一, the note on
+  the phrase explains the difference, and the engine's sandhi still fires
+  inside it (the 一 before 歲 becomes *jat6*).
+
+Your details live in `localStorage` under `singsin_profile`; **Forget them**
+removes the key and puts the library back exactly as it was.
+
+### 6. Optional MiniMax enrichment (`src/minimax.rs`)
 
 When you add or edit a phrase you can ask the MiniMax chat API for bespoke
 colloquial sandhi notes, a custom mistakes table and natural sentence-particle
@@ -368,7 +404,12 @@ singsin/
     ├── data/
     │   ├── phrases.rs         Phrase model, seed loader, Han ⇄ Jyutping alignment
     │   ├── phonetics.rs       the deterministic phonetic engine
-    │   └── gloss.rs           the built-in character ⇄ English dictionary
+    │   ├── gloss.rs           the built-in character ⇄ English dictionary
+    │   ├── tables.rs          the curated places, jobs, hobbies and family
+    │   ├── profile.rs         what the learner told us about themselves
+    │   ├── templates.rs       the sentences with a hole in them
+    │   ├── personal.rs        building the library the learner sees
+    │   └── numbers.rs         Han numerals, written and spoken
     ├── dsp/
     │   ├── pitch.rs           YIN pitch tracking + RMS
     │   ├── vad.rs             voice activity detection / trimming
@@ -380,7 +421,7 @@ singsin/
     │   └── tts.rs             Cantonese speech-synthesis fallback
     └── components/            header, banner, sidebar, hero, studio,
                                chart, cards, tonelist, mistakes, drill,
-                               takeaway, modals
+                               takeaway, modals, details
 ```
 
 ## Design

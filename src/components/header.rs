@@ -1,4 +1,4 @@
-//! The top bar — brand mark, language tag and the two modal triggers.
+//! The top bar — brand mark, language tag and the modal triggers.
 
 use yew::prelude::*;
 
@@ -8,6 +8,7 @@ use super::Icon;
 pub struct Props {
     pub on_open_tone_guide: Callback<()>,
     pub on_open_settings: Callback<()>,
+    pub on_open_details: Callback<()>,
     pub on_toggle_menu: Callback<()>,
     pub menu_open: bool,
 }
@@ -20,6 +21,10 @@ pub fn header(props: &Props) -> Html {
     };
     let settings = {
         let cb = props.on_open_settings.clone();
+        Callback::from(move |_| cb.emit(()))
+    };
+    let details = {
+        let cb = props.on_open_details.clone();
         Callback::from(move |_| cb.emit(()))
     };
     let menu = {
@@ -49,6 +54,10 @@ pub fn header(props: &Props) -> Html {
                 </span>
 
             <div class="header-actions">
+                <button type="button" class="btn ghost" onclick={details}>
+                    { Icon::User.svg() }
+                    <span>{ "My details" }</span>
+                </button>
                 <button type="button" class="btn ghost" onclick={tone_guide}>
                     { Icon::Gauge.svg() }
                     <span>{ "Tone Guide" }</span>

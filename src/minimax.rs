@@ -77,9 +77,111 @@ pub async fn enrich(
     Err(last_error)
 }
 
+/// Ask MiniMax for the Jyutping of a Chinese name.
+///
+/// The answer is a *suggestion*, never a fact: the app puts it in the
+/// field for the learner to read, and they can correct it before it is
+/// saved. That is the only place in the app where a model is allowed near
+/// a reading — the cities and jobs come from tables that were checked
+/// by hand, because a wrong tone there would be taught as fact.
+///
+/// The reply is checked before it is used: every syllable must be letters
+/// followed by a tone from 1 to 6, and there must be exactly one syllable
+/// for every character of the name. A name whose reading cannot be made
+/// sense of is refused rather than shown.
+pub async fn guess_jyutping(settings: &Settings, han: &str) -> Result<String, String> {
+    let han = han.trim();
+    if han.is_empty() {
+        return Err("Type the Chinese name first.".into());
+    }
+    if settings.mini_max_api_key.trim().is_empty() {
+        return Err("No MiniMax API key saved — add one in Audio Settings.".into());
+    }
+
+    let body = json!({
+        "model": MODEL,
+        "messages": [
+            {"role": "system", "content":
+                "You write Jyutping, the standard romanisation of Cantonese (Hong Kong). \
+                 Given a Chinese name, reply with its Jyutping and nothing else: one syllable \
+                 per character, lowercase letters followed by a tone digit from 1 to 6, separated \
+                 by single spaces. No explanation, no punctuation, no other text. \
+                 If a character has more than one reading, use the reading a Hong Kong person \
+                 would use for a name."},
+            {"role": "user", "content": han},
+        ],
+        "stream": false,
+    });
+
+    let mut last_error = String::from("no endpoint answered");
+    for endpoint in ENDPOINTS {
+        match call(endpoint, &settings.mini_max_api_key, &body).await {
+            Ok(text) => match parse_jyutping(&text, han.chars().count()) {
+                Ok(jp) => return Ok(jp),
+                Err(e) => last_error = e,
+            },
+            Err(e) => last_error = e,
+        }
+    }
+    Err(last_error)
+}
+
+/// Check that a reply really is a Jyutping reading of `syllables` syllables.
+///
+/// The model is asked for nothing but the reading, but models add
+/// explanations and punctuation all the same; the check is what keeps
+/// that from reaching the learner.
+fn parse_jyutping(text: &str, syllables: usize) -> Result<String, String> {
+    let cleaned: String = text
+        .trim()
+        .chars()
+        .filter(|c| !c.is_whitespace() && *c != '`' && *c != '"' && *c != '\'')
+        .collect();
+
+    let tokens: Vec<&str> = cleaned
+        .split(|c: char| c == ',' || c == '，' || c == ';' || c == '；')
+        .filter(|t| !t.is_empty())
+        .collect();
+
+    let mut out: Vec<String> = Vec::new();
+    for token in tokens {
+        // A token may hold several syllables if the model forgot the
+        // spaces; split it on the tone digits instead.
+        let mut current = String::new();
+        for ch in token.chars() {
+            current.push(ch);
+            if ch.is_ascii_digit() {
+                let tone = ch.to_digit(10).unwrap_or(0);
+                if !(1..=6).contains(&tone) {
+                    return Err(format!("the reply was not a Jyutping reading: {text:?}"));
+                }
+                let syl = current.trim_end_matches(|c: char| c.is_ascii_digit());
+                if syl.is_empty()
+                    || !syl.chars().all(|c| c.is_ascii_lowercase())
+                {
+                    return Err(format!("the reply was not a Jyutping reading: {text:?}"));
+                }
+                out.push(current.clone());
+                current.clear();
+            }
+        }
+        if !current.is_empty() {
+            return Err(format!("the reply was not a Jyutping reading: {text:?}"));
+        }
+    }
+
+    if out.len() != syllables {
+        return Err(format!(
+            "the reply had {} syllables for {} characters",
+            out.len(),
+            syllables
+        ));
+    }
+    Ok(out.join(" "))
+}
+
 /// Perform one chat-completion request.
-async fn call(endpoint: &str, api_key: &str, body: &Value) -> Result<String, String> {
-    use wasm_bindgen::{JsCast, JsValue};
+async fn call(endpoint: &str, api_key: &str, body: &Value) -> Result<String, String> {    use wasm_bindgen::{JsCast, JsValue};
     use wasm_bindgen_futures::JsFuture;
     use web_sys::{Request, RequestInit, RequestMode, Response};
 

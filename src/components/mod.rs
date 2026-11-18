@@ -3,6 +3,7 @@
 pub mod banner;
 pub mod cards;
 pub mod chart;
+pub mod details;
 pub mod drill;
 pub mod header;
 pub mod hero;
@@ -126,6 +127,7 @@ pub enum Icon {
     Music,
     Gauge,
     Layers,
+    User,
 }
 
 impl Icon {
@@ -147,6 +149,7 @@ impl Icon {
             Icon::Music => "M9 18a3 3 0 11-2-2.8V5l12-2v11.2a3 3 0 11-2-2.8V6.2L9 7.5z",
             Icon::Gauge => "M12 4a9 9 0 00-9 9 1 1 0 001 1h16a1 1 0 001-1 9 9 0 00-9-9zm-4 8a1 1 0 112 0 1 1 0 01-2 0zm3.6 4.9l-1.8-1.8A4 4 0 0112 10a4 4 0 013.2 1.6l-1.8 1.8A2 2 0 0012 12a2 2 0 00-.4 1.9z",
             Icon::Layers => "M12 3l9 5-9 5-9-5 9-5zm-7.5 8.7L12 15.4l7.5-3.7 1.8.9L12 16.6 2.7 12.6l1.8-.9z",
+            Icon::User => "M12 4a4 4 0 110 8 4 4 0 010-8zm0 10c-4 0-7.5 1.9-7.5 4.4V20h15v-1.6c0-2.5-3.5-4.4-7.5-4.4z",
         }
     }
 

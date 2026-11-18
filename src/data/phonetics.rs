@@ -1009,8 +1009,16 @@ const CURATED: &[(i64, PhraseOverride)] = &[
     ),
 ];
 
-fn curated_for(id: i64) -> Option<&'static PhraseOverride> {
-    CURATED.iter().find(|(k, _)| *k == id).map(|(_, v)| v)
+fn curated_for(phrase: &Phrase) -> Option<&'static PhraseOverride> {
+    // The curated notes are written for one particular sentence, so they
+    // only apply while the phrase still has the bundled wording. A
+    // personalised phrase gets the engine's own analysis instead — which
+    // is right, because the curated notes would be talking about the
+    // wrong words.
+    if !crate::data::phrases::is_bundled_wording(phrase) {
+        return None;
+    }
+    CURATED.iter().find(|(k, _)| *k == phrase.id).map(|(_, v)| v)
 }
 
 // ───────────────────────────────────────────────────────────────────────────
@@ -1020,7 +1028,7 @@ fn curated_for(id: i64) -> Option<&'static PhraseOverride> {
 /// Analyse a phrase and produce everything the UI renders for it.
 pub fn analyze(phrase: &Phrase) -> Analysis {
     let pairs = align(&phrase.han, &phrase.jyutping);
-    let override_data = curated_for(phrase.id);
+    let override_data = curated_for(phrase);
 
     // ── parse ────────────────────────────────────────────────────────────
     let parsed: Vec<(String, String, Parsed)> = pairs
@@ -1312,10 +1320,19 @@ pub fn analyze(phrase: &Phrase) -> Analysis {
     }
 
     // An explicit user override wins over everything.
+    //
+    // The bundled library's own spoken form is only used while the phrase
+    // still has the bundled wording: a learner who changed the country in
+    // phrase 2 would otherwise still be told that 蘭 is spoken *laan1*.
     let spoken_jyutping = phrase
         .spoken_jyutping
         .clone()
-        .or_else(|| seed_spoken_jyutping(phrase.id).map(|s| s.to_string()))
+        .or_else(|| {
+            if !crate::data::phrases::is_bundled_wording(phrase) {
+                return None;
+            }
+            seed_spoken_jyutping(phrase.id).map(|s| s.to_string())
+        })
         .or_else(|| override_data.and_then(|o| o.spoken_jyutping).map(|s| s.to_string()))
         .unwrap_or(spoken_jyutping);
 

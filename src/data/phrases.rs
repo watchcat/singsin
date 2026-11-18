@@ -6,6 +6,7 @@
 //! `singsin_phrases`.
 
 use serde::{Deserialize, Serialize};
+use std::sync::OnceLock;
 use wasm_bindgen::JsValue;
 
 use super::phonetics::{DrillPass, MistakeRow};
@@ -66,6 +67,33 @@ pub fn seed_spoken_jyutping(id: i64) -> Option<&'static str> {
     match id {
         2 => Some("ngo5 zyu6 hai2 ho4 laan1"),
         _ => None,
+    }
+}
+
+/// The bundled phrase with this id, if the library has one.
+///
+/// The list is parsed once and then kept: the analysis asks this question
+/// for every phrase it renders.
+fn seed_phrase(id: i64) -> Option<&'static Phrase> {
+    static SEED: OnceLock<Vec<Phrase>> = OnceLock::new();
+    SEED.get_or_init(seed_phrases)
+        .iter()
+        .find(|p| p.id == id)
+}
+
+/// Whether a phrase still says what the bundled library says.
+///
+/// The curated notes belong to one particular sentence: phrase 2 is about
+/// the Netherlands, and its spoken Jyutping, its strip note and its
+/// mistakes all say so. A learner who personalises that phrase — to Poland,
+/// say — must not be handed the Netherlands' notes, so the overrides are
+/// only used while the wording is still the bundled one.
+pub fn is_bundled_wording(phrase: &Phrase) -> bool {
+    match seed_phrase(phrase.id) {
+        Some(original) => {
+            original.han == phrase.han && original.jyutping == phrase.jyutping
+        }
+        None => false,
     }
 }
 
