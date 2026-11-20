@@ -332,8 +332,8 @@ pub fn my_details(props: &DetailsProps) -> Html {
                     { "Your details are kept in this browser and nowhere else: the app is a static \
                        bundle, so the server never sees them and nobody else's can reach them. But \
                        a browser is per computer, not per person — on a shared machine the next \
-                       person to open the app finds your name in the greeting. Press \
-                       **Forget them** when you are done." }
+                       person to open the app finds your name in the greeting. Press the \
+                       \"Forget them\" button when you are done." }
                 </p>
                 <div class="editor-grid">
                     { number_field("Age", "35", (*profile).age, set_age) }
